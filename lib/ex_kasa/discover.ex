@@ -4,7 +4,7 @@ defmodule ExKasa.Discover do
   :gen_udp.send(socket, {255, 255, 255, 255}, 9999, discover_message)
   """
 
-  @discover_message ~s({"system":{"get_sysinfo":{}}})
+  @discover_message ExKasa.Protocol.Commands.sysinfo()
 
   @default_opts [address: {255, 255, 255, 255}, port: 9999, message: @discover_message]
 

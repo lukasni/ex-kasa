@@ -4,14 +4,14 @@ defmodule ExKasa.Protocol.Crypto do
   """
   require Bitwise
 
-  import Bitwise, only: [^^^: 2]
+  import Bitwise, only: [bxor: 2]
 
   @initialization_vector 171
 
   def encrypt(command) do
     for <<i::8 <- command>>, reduce: {@initialization_vector, <<byte_size(command)::32>>} do
       {key, result} ->
-        a = key ^^^ i
+        a = bxor(key, i)
         {a, result <> <<a>>}
     end
     |> elem(1)
@@ -21,7 +21,7 @@ defmodule ExKasa.Protocol.Crypto do
     {_, result} =
       for <<i::8 <- command>>, reduce: {@initialization_vector, ""} do
         {key, result} ->
-          a = key ^^^ i
+          a = bxor(key, i)
           {i, result <> <<a>>}
       end
 
