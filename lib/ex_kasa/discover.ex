@@ -19,7 +19,7 @@ defmodule ExKasa.Discover do
 
     :gen_udp.send(socket, options[:address], options[:port], message)
 
-    receive_loop(%{})
+    receive_loop([])
   end
 
   defp receive_loop(acc) do
@@ -37,10 +37,9 @@ defmodule ExKasa.Discover do
   defp handle_response(acc, ip, message) do
     message = <<byte_size(message)::32>> <> message
     with {:ok, decrypted} <- ExKasa.Protocol.decrypt(message),
-         {:ok, decoded} <- Jason.decode(decrypted) do
-      acc
-      |> Map.put(ip, decoded)
-      |> receive_loop()
+         {:ok, decoded} <- Jason.decode(decrypted),
+         device <- ExKasa.SmartDevice.new(ip, decoded) do
+      receive_loop([device | acc])
     else
       error ->
         Logger.debug(error)

@@ -5,8 +5,8 @@ defmodule ExKasa.Protocol.Commands do
     ~s({"system":{"get_sysinfo":null}})
   end
 
-  def reboot do
-    ~s({"system":{"reboot":{"delay":1}}})
+  def reboot(delay \\ 1) do
+    ~s({"system":{"reboot":{"delay":#{delay}}}})
   end
 
   def switch(:on) do
@@ -23,5 +23,9 @@ defmodule ExKasa.Protocol.Commands do
 
   def led(:off) do
     ~s({"system":{"set_led_off":{"off":1}}})
+  end
+
+  def cloud_info() do
+    ~s({"cnCloud":{"get_info":{}}})
   end
 end

@@ -1,18 +1,38 @@
 defmodule ExKasa do
-  require Bitwise
+  alias ExKasa.SmartDevice
+  alias ExKasa.Protocol.Commands
 
-  def send_receive(command, host, port \\ 9999) do
-    {:ok, socket} = :gen_tcp.connect(String.to_charlist(host), port, [:binary])
+  def update(%SmartDevice{} = device) do
+    sysinfo = ExKasa.Protocol.send_receive(device, Commands.sysinfo)
+    SmartDevice.new(device.ip, sysinfo)
+  end
 
-    :gen_tcp.send(socket, ExKasa.Protocol.Crypto.encrypt(command))
+  def toggle(%SmartDevice{} = device) do
+    device = update(device)
 
-    receive do
-      {:tcp, ^socket, message} ->
-        ExKasa.Protocol.Crypto.decrypt(message)
-    after
-      5000 ->
-        {:error, :timeout}
+    case device.relay_state do
+      1 ->
+        turn_off(device)
+        Map.put(device, :relay_state, 0)
+      0 ->
+        turn_on(device)
+        Map.put(device, :relay_state, 1)
     end
+  end
 
+  def turn_on(%SmartDevice{} = device) do
+    ExKasa.Protocol.send_receive(device, Commands.switch(:on))
+  end
+
+  def turn_off(%SmartDevice{} = device) do
+    ExKasa.Protocol.send_receive(device, Commands.switch(:off))
+  end
+
+  def led_on(%SmartDevice{} = device) do
+    ExKasa.Protocol.send_receive(device, Commands.led(:on))
+  end
+
+  def led_off(%SmartDevice{} = device) do
+    ExKasa.Protocol.send_receive(device, Commands.led(:off))
   end
 end
