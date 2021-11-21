@@ -1,5 +1,18 @@
 defmodule ExKasa.SmartDevice do
-  @moduledoc false
+  @moduledoc """
+  SmartDevice struct used by higher level functions
+  """
+
+  @type t() :: %__MODULE__{
+    ip: String.t(),
+    alias: String.t(),
+    device_name: String.t(),
+    model: String.t(),
+    mac: String.t(),
+    relay_state: :on | :off,
+    led_state: :on | :off,
+    raw_sysinfo: %{String.t() => String.t()}
+  }
 
   defstruct [
     :ip,
@@ -9,6 +22,7 @@ defmodule ExKasa.SmartDevice do
     :mac,
     :hardware_version,
     :relay_state,
+    :led_state,
     :raw_sysinfo
   ]
 
@@ -25,8 +39,11 @@ defmodule ExKasa.SmartDevice do
       device_name: sysinfo["dev_name"],
       model: sysinfo["model"],
       mac: sysinfo["mac"],
-      relay_state: sysinfo["relay_state"],
-      led_off: sysinfo["led_off"]
+      relay_state: on_off(sysinfo["relay_state"]),
+      led_state: on_off(sysinfo["led_off"])
     )
   end
+
+  defp on_off(1), do: :on
+  defp on_off(0), do: :off
 end

@@ -22,17 +22,21 @@ defmodule ExKasa do
 
   def turn_on(%SmartDevice{} = device) do
     ExKasa.Protocol.send_receive(device, Commands.switch(:on))
+    Map.put(device, :relay_state, :on)
   end
 
   def turn_off(%SmartDevice{} = device) do
     ExKasa.Protocol.send_receive(device, Commands.switch(:off))
+    Map.put(device, :relay_state, :off)
   end
 
   def led_on(%SmartDevice{} = device) do
     ExKasa.Protocol.send_receive(device, Commands.led(:on))
+    Map.put(device, :led_state, :on)
   end
 
   def led_off(%SmartDevice{} = device) do
     ExKasa.Protocol.send_receive(device, Commands.led(:off))
+    Map.put(device, :led_state, :off)
   end
 end
