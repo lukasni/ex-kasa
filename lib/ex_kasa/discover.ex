@@ -1,7 +1,9 @@
 defmodule ExKasa.Discover do
   @moduledoc """
-  {:ok ,socket} = :gen_udp.open(0, [:binary, {:broadcast, true}])
-  :gen_udp.send(socket, {255, 255, 255, 255}, 9999, discover_message)
+  Device discovery module. This module makes use of UDP broadcasts to find TP-Link devices.
+
+  By default, it tries to contact devices on port 9999 using the sysinfo command.
+  Any devices that respond to the broadcast within 2 seconds are returned in a list of `%ExKasa.SmartDevice{}` structs
   """
 
   @discover_message ExKasa.Protocol.Commands.sysinfo()

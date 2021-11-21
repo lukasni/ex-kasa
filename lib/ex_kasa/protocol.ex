@@ -1,6 +1,6 @@
 defmodule ExKasa.Protocol do
   @moduledoc """
-
+  Basic TP-Link protocol functions to encrypt and decrypt messages and send/receive messages to devices.
   """
   defdelegate encrypt(message), to: ExKasa.Protocol.Crypto
   defdelegate decrypt(message), to: ExKasa.Protocol.Crypto

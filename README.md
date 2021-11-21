@@ -9,5 +9,5 @@ The library makes use of the reverse-engineering work done by Lubomir Stroetmann
 
 ## Links
 
-- [https://www.softscheck.com/en/reverse-engineering-tp-link-hs110/#TP-Link%20Smart%20Home%20Protocol](softScheck article reverse-engineering the protocol)
-- [https://github.com/python-kasa/python-kasa](Python Kasa)
+* [softScheck article reverse-engineering the protocol](https://www.softscheck.com/en/reverse-engineering-tp-link-hs110/#TP-Link%20Smart%20Home%20Protocol)
+* [Python Kasa](https://github.com/python-kasa/python-kasa)
